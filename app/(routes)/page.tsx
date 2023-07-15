@@ -1,12 +1,9 @@
-import React from 'react'
+import React from "react";
 
 interface HomePageProps {}
 
 const HomePage = ({}: HomePageProps) => {
+  return <div>HomePage</div>;
+};
 
-  return (
-    <div>HomePage</div>
-  )
-}
-
-export default HomePage
+export default HomePage;
