@@ -5,7 +5,7 @@ import MainNav from "@/components/helpers/main-nav";
 // import NavbarActions from "@/components/navbar-actions";
 // import getCategories from "@/actions/get-categories";
 import Container from "../helpers/container";
-import { getCategories } from "@/actions/getCategories";
+import { getCategories } from "@/actions/get-categories";
 import { Category } from "@/types";
 import NavbarActions from "./nav-bar-action";
 
