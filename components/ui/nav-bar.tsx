@@ -1,13 +1,17 @@
 import Link from "next/link";
 
-import MainNav from "@/components/main-nav";
+import MainNav from "@/components/helpers/main-nav";
 
 // import NavbarActions from "@/components/navbar-actions";
 // import getCategories from "@/actions/get-categories";
-import Container from "./container";
+import Container from "../helpers/container";
+import { getCategories } from "@/actions/getCategories";
+import { Category } from "@/types";
+import NavbarActions from "./nav-bar-action";
 
 const Navbar = async () => {
-  // const categories = await getCategories();
+  const categories: Category[] = await getCategories();
+  console.log("categories: ", categories);
 
   return (
     <div className="border-b">
@@ -16,8 +20,8 @@ const Navbar = async () => {
           <Link href="/" className="ml-4 flex lg:ml-0 gap-x-2">
             <p className="font-bold text-xl">STORE</p>
           </Link>
-          {/* <MainNav data={categories} /> */}
-          {/* <NavbarActions /> */}
+          <MainNav data={categories} />
+          <NavbarActions />
         </div>
       </Container>
     </div>

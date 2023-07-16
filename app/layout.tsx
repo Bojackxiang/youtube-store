@@ -3,8 +3,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ToastProvider } from "./providers/toast-provider";
 import { ModalProvider } from "./providers/modal-provider";
-import Navbar from "@/components/nav-bar";
-import Footer from "@/components/footer";
+import Navbar from "@/components/ui/nav-bar";
+import Footer from "@/components/ui/footer";
 
 const font = Inter({ subsets: ["latin"] });
 
