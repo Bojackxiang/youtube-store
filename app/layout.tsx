@@ -19,12 +19,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <body className={font.className}>
-      <ToastProvider />
-      <ModalProvider />
-      <Navbar />
-      {children}
-      <Footer />
-    </body>
+    <html>
+      <body className={font.className}>
+        <ToastProvider />
+        <ModalProvider />
+        <Navbar />
+        {children}
+        <Footer />
+      </body>
+    </html>
   );
 }

@@ -11,7 +11,6 @@ import NavbarActions from "./nav-bar-action";
 
 const Navbar = async () => {
   const categories: Category[] = await getCategories();
-  console.log("categories: ", categories);
 
   return (
     <div className="border-b">
