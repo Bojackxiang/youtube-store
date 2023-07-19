@@ -16,6 +16,7 @@ const Currency: React.FC<CurrencyProps> = ({
 }) => {
   const [isMounted, setIsMounted] = useState(false);
 
+  // 这边是为了解决服务端渲染的问题
   useEffect(() => {
     setIsMounted(true);
   }, []);
