@@ -14,7 +14,7 @@ const CategoriesPage = async ({}: CategoryProps) => {
       <Container>
         <div className="grid grid-cols-1 gap-y-4 mt-8 min-h-full">
           {categories.map((category) => (
-            <CategoryCard category={category} />
+            <CategoryCard key={category.id} category={category} />
           ))}
         </div>
       </Container>
