@@ -8,6 +8,7 @@ import Container from "../helpers/container";
 import { getCategories } from "@/actions/get-categories";
 import { Category } from "@/types";
 import NavbarActions from "./nav-bar-action";
+import UserNameDropdownMenu from "./user-name-dropdown-menu";
 
 const Navbar = async () => {
   const categories: Category[] = await getCategories();
@@ -20,7 +21,8 @@ const Navbar = async () => {
             <p className="font-bold text-xl">STORE</p>
           </Link>
           <MainNav data={categories} />
-          <NavbarActions />
+          <NavbarActions/>
+          <UserNameDropdownMenu className="ml-2"/>
         </div>
       </Container>
     </div>
