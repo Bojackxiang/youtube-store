@@ -1,4 +1,5 @@
 "use client";
+import LoginModal from "@/components/ui/login-modal";
 import PreviewModal from "@/components/ui/preview-modal";
 import { useEffect, useState } from "react";
 
@@ -18,6 +19,7 @@ export const ModalProvider = () => {
   return (
     <>
       <PreviewModal/>
+      <LoginModal/>
     </>
   );
 };
