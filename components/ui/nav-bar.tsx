@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 import MainNav from "@/components/helpers/main-nav";
+import { useSession } from "next-auth/react";
 
-// import NavbarActions from "@/components/navbar-actions";
-// import getCategories from "@/actions/get-categories";
 import Container from "../helpers/container";
 import { getCategories } from "@/actions/get-categories";
 import { Category } from "@/types";
@@ -12,6 +11,8 @@ import UserNameDropdownMenu from "./user-name-dropdown-menu";
 
 const Navbar = async () => {
   const categories: Category[] = await getCategories();
+  const session = null
+
 
   return (
     <div className="border-b">

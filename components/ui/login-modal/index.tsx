@@ -25,59 +25,72 @@ const formSchema = z.object({
 
 type LoginFormValues = z.infer<typeof formSchema>;
 
-const form = useForm<LoginFormValues>({
-  resolver: zodResolver(formSchema),
-  defaultValues: {
-    email: "",
-    password: "",
-  },
-});
-
 const LoginModal = () => {
   const loginModal = useLoginModal();
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = () => {};
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
+
+  const onSubmit = (data: LoginFormValues) => {
+    console.log(data);
+  };
 
   return (
     <Modal open={loginModal.isOpen} onClose={loginModal.onClose}>
-      <div className="flex flex-col w-full items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
-        <Form {...form}>
-          <div>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} placeholder="email" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div>
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>password</FormLabel>
-                  <FormControl>
-                    <Input disabled={loading} type="password" placeholder="password" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
-          <div>
-            <Button type="submit">Submit</Button>
-          </div>
-        </Form>
-      </div>
+      <Form {...form}>
+        <div className="flex flex-col w-full items-start gap-x-6 gap-y-8 sm:grid-cols-12 lg:gap-x-8">
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <div>
+              <FormField
+                control={form.control}
+                name="email"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Email</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={loading}
+                        placeholder="email"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div>
+              <FormField
+                control={form.control}
+                name="password"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>password</FormLabel>
+                    <FormControl>
+                      <Input
+                        disabled={loading}
+                        type="password"
+                        placeholder="password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+            <div>
+              <Button type="submit">Submit</Button>
+            </div>
+          </form>
+        </div>
+      </Form>
     </Modal>
   );
 };
