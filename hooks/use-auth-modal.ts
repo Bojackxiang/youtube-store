@@ -1,17 +1,17 @@
 import { create } from 'zustand';
 
 
-interface LoginModalProps {
+interface AuthModalProps {
   isOpen: boolean;
   onOpen: () => void;
   onClose: () => void;
 }
 
-const useLoginModal = create<LoginModalProps>((set) => ({
+const useAuthModal = create<AuthModalProps>((set) => ({
   isOpen: false,
   data: undefined,
   onOpen: () => set({ isOpen: true,}),
   onClose: () => set({ isOpen: false }),
 }));
 
-export default useLoginModal;
+export default useAuthModal;

@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/libs/tw";
 import { Button } from "@/shadcn-components/ui/button";
-import useLoginModal from "@/hooks/use-login-modal";
+import useLoginModal from "@/hooks/use-auth-modal";
 import { useSession } from "next-auth/react";
 
 interface UserNameDropdownMenuProps {
@@ -53,7 +53,7 @@ const UserNameDropdownMenu: React.FC<UserNameDropdownMenuProps> = ({
           </DropdownMenu.Root>
         </div>
       ) : (
-        <Button onClick={loginModal.onOpen}>Login</Button>
+        <Button onClick={loginModal.onOpen}>Login / Sign in</Button>
       )}
     </>
   );
