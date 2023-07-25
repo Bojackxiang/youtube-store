@@ -2,23 +2,19 @@
 
 import * as z from "zod";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import axios from "axios";
 
 import useLoginModal from "@/hooks/use-auth-modal";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/shadcn-components/ui/form";
-import { useForm } from "react-hook-form";
+import { Form } from "@/shadcn-components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Input } from "@/shadcn-components/ui/input";
 import { Button } from "@/shadcn-components/ui/button";
 import AuthSideInfo from "../components/AuthSideInfo";
 import AuthTitle from "./AuthTitle";
 import InputField from "./InputField";
+import { toast } from "react-hot-toast";
+import { userRegisterRequest } from "@/actions/user-register-request";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().min(1),
@@ -30,9 +26,9 @@ type LoginFormValues = z.infer<typeof formSchema>;
 type Variant = "LOGIN" | "REGISTER";
 
 const SignUpForm = () => {
-  const loginModal = useLoginModal();
   const [loading, setLoading] = useState(false);
-  const [variant, setVariant] = useState<Variant>("LOGIN");
+  const loginModal = useLoginModal();
+  const router = useRouter();
 
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
@@ -43,8 +39,28 @@ const SignUpForm = () => {
     },
   });
 
-  const onSubmit = (data: LoginFormValues) => {
-    console.log(data);
+  const onSubmit = async (data: LoginFormValues) => {
+    try {
+      setLoading(true);
+
+      const response = await userRegisterRequest(data);
+      console.log("1response: ", response);
+      if (response) {
+        if (!response.success) {
+          toast.error(response.message);
+        } else {
+          toast.success("User has been registered successfully");
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+          loginModal.onClose();
+          router.push("/sign-up-success");
+        }
+      }
+    } catch (error: any) {
+      console.log(error);
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
