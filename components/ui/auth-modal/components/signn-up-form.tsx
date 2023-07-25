@@ -3,7 +3,6 @@
 import * as z from "zod";
 import { useState } from "react";
 
-import Modal from "@/components/helpers/modal";
 import useLoginModal from "@/hooks/use-auth-modal";
 import {
   Form,
@@ -19,6 +18,7 @@ import { Input } from "@/shadcn-components/ui/input";
 import { Button } from "@/shadcn-components/ui/button";
 import AuthSideInfo from "../components/AuthSideInfo";
 import AuthTitle from "./AuthTitle";
+import InputField from "./InputField";
 
 const formSchema = z.object({
   email: z.string().min(1),
@@ -51,76 +51,40 @@ const SignUpForm = () => {
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <AuthTitle>Sign Up</AuthTitle>
-        <div className="flex justify-around p-6">
+        <div className="flex flex-col sm:flex-row justify-around p-5">
           <div className="flex-1">
-            <div>
-              <FormField
-                control={form.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="border-neutral-400 pl-2"
-                        disabled={loading}
-                        placeholder="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mt-4">
-              <FormField
-                control={form.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        className="border-neutral-400 pl-2"
-                        disabled={loading}
-                        placeholder="password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-            <div className="mt-4">
-              <FormField
-                control={form.control}
-                name="phone"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>phone</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="border-neutral-400 pl-2"
-                        disabled={loading}
-                        placeholder="phone"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
+            <InputField
+              form={form}
+              fieldName="email"
+              placeholder="email"
+              label="email"
+              loading={loading}
+            />
+            <InputField
+              className="mt-4"
+              form={form}
+              fieldName="password"
+              placeholder="password"
+              label="password"
+              type="password"
+              loading={loading}
+            />
+            <InputField
+              className="mt-4"
+              form={form}
+              fieldName="phone"
+              placeholder="phone"
+              label="phone"
+              loading={loading}
+            />
+
             <div className="mt-4">
               <Button className="w-full text-neutral-100 font-bold bg-gradient-to-r to-blue-500 from-cyan-500">
                 Sign up
               </Button>
             </div>
           </div>
-          <div className="flex-1 flex justify-center items-center mx-6 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500">
+          <div className="mt-6 p-6 sm:p-0 sm:mt-0 flex-1 flex justify-center items-center sm:mx-6 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500">
             <AuthSideInfo />
           </div>
         </div>
