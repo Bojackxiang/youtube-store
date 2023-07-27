@@ -25,6 +25,7 @@ export const authOptions: AuthOptions = {
         phone: { label: 'phone', type: 'text' }
       },
       async authorize(credentials) {
+        console.log("reached here")
         if (!credentials?.email || !credentials?.password) {
           throw new Error('Invalid credentials');
         }
@@ -34,7 +35,6 @@ export const authOptions: AuthOptions = {
           password: credentials.password,
           phone: credentials.phone
         })
-
 
         return {
           id: '', 

@@ -23,9 +23,12 @@ const formSchema = z.object({
 });
 
 type LoginFormValues = z.infer<typeof formSchema>;
-type Variant = "LOGIN" | "REGISTER";
 
-const SignUpForm = () => {
+interface SignUpFormProps {
+  toggleVariant: (event: React.MouseEvent<HTMLButtonElement>) => void;
+}
+
+const SignUpForm: React.FC<SignUpFormProps> = ({ toggleVariant }) => {
   const [loading, setLoading] = useState(false);
   const loginModal = useLoginModal();
   const router = useRouter();
@@ -93,12 +96,17 @@ const SignUpForm = () => {
               label="phone"
               loading={loading}
             />
-
             <div className="mt-4">
               <Button className="w-full text-neutral-100 font-bold bg-gradient-to-r to-blue-500 from-cyan-500">
                 Sign up
               </Button>
             </div>
+            <Button
+              className="block text-center mx-auto text-blue-600"
+              onClick={toggleVariant}
+            >
+              Already have an account? Login
+            </Button>
           </div>
           <div className="mt-6 p-6 sm:p-0 sm:mt-0 flex-1 flex justify-center items-center sm:mx-6 rounded-lg bg-gradient-to-r from-cyan-500 to-blue-500">
             <AuthSideInfo />

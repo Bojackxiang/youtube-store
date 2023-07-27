@@ -1,12 +1,20 @@
-import React from 'react'
+import React from "react";
 
-const AuthSideInfo = () => {
-  return (
-    <div>
-      <h3 className='text-center text-white font-bold text-2xl'>Register Now </h3>
-      <h3 className='text-center text-white font-bold text-2xl'>Enjoy the 20% off</h3>
-    </div>
-  )
+interface AuthSideInfoProps {
+  line1text?: string;
+  line2text?: string;
 }
 
-export default AuthSideInfo
+const AuthSideInfo: React.FC<AuthSideInfoProps> = ({
+  line1text = "Register Now",
+  line2text = "Enjoy the 20% off",
+}) => {
+  return (
+    <div>
+      <h3 className="text-center text-white font-bold text-2xl">{line1text}</h3>
+      <h3 className="text-center text-white font-bold text-2xl">{line2text}</h3>
+    </div>
+  );
+};
+
+export default AuthSideInfo;
