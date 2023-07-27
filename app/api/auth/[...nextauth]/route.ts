@@ -22,7 +22,6 @@ export const authOptions: AuthOptions = {
       credentials: {
         email: { label: 'email', type: 'text' },
         password: { label: 'password', type: 'password' },
-        phone: { label: 'phone', type: 'text' }
       },
       async authorize(credentials) {
         console.log("reached here")
@@ -30,11 +29,8 @@ export const authOptions: AuthOptions = {
           throw new Error('Invalid credentials');
         }
 
-        const user = await userRegisterRequest({
-          email: credentials.email,
-          password: credentials.password,
-          phone: credentials.phone
-        })
+        console.log(credentials)
+
 
         return {
           id: '', 

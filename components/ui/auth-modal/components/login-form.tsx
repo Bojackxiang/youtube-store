@@ -3,7 +3,7 @@
 import * as z from "zod";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import axios from "axios";
+import { signIn } from "next-auth/react";
 
 import useLoginModal from "@/hooks/use-auth-modal";
 import { Form } from "@/shadcn-components/ui/form";
@@ -13,17 +13,14 @@ import AuthSideInfo from "../components/AuthSideInfo";
 import AuthTitle from "./AuthTitle";
 import InputField from "./InputField";
 import { toast } from "react-hot-toast";
-import { userRegisterRequest } from "@/actions/user-register-request";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   email: z.string().min(1),
   password: z.string().min(1),
-  phone: z.string().min(1),
 });
 
 type LoginFormValues = z.infer<typeof formSchema>;
-type Variant = "LOGIN" | "REGISTER";
 
 interface LoginFormProps {
   toggleVariant: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -44,21 +41,21 @@ const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
+      console.log("here");
       setLoading(true);
-
-      // const response = await userRegisterRequest(data);
-      // if (response) {
-      //   if (!response.success) {
-      //     toast.error(response.message);
-      //   } else {
-      //     toast.success("User has been registered successfully");
-      //     await new Promise((resolve) => setTimeout(resolve, 2000));
-      //     loginModal.onClose();
-      //     router.push("/sign-up-success");
-      //   }
-      // }
+      await signIn("credentials", { redirect: false, ...data })
+        .then((response) => {
+          if (response?.error) {
+            throw new Error(response.error);
+          } else {
+            toast.success("Login success");
+          }
+        })
+        .catch((e) => {
+          toast.error(`Something wrong: ${e.message} `);
+          setLoading(false);
+        });
     } catch (error: any) {
-      console.log(error);
       toast.error(error.message);
     } finally {
       setLoading(false);
@@ -88,14 +85,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
               loading={loading}
             />
             <div className="mt-4">
-              <Button className="w-full text-neutral-100 font-bold bg-gradient-to-r to-blue-500 from-cyan-500">
-                Sign up
-              </Button>
               <Button
-                className="block text-center mx-auto text-blue-600"
-                onClick={toggleVariant}
+                type="submit"
+                className="w-full text-neutral-100 font-bold bg-gradient-to-r to-blue-500 from-cyan-500"
               >
-                Don't have an account? Sign up
+                Login
               </Button>
             </div>
           </div>
@@ -104,6 +98,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
           </div>
         </div>
       </form>
+      <Button
+        className="block text-center mx-auto text-blue-600"
+        onClick={toggleVariant}
+      >
+        Don't have an account? Sign up
+      </Button>
     </Form>
   );
 };
