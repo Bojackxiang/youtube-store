@@ -5,7 +5,6 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { signIn } from "next-auth/react";
 
-import useLoginModal from "@/hooks/use-auth-modal";
 import { Form } from "@/shadcn-components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/shadcn-components/ui/button";
@@ -14,6 +13,7 @@ import AuthTitle from "./AuthTitle";
 import InputField from "./InputField";
 import { toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
+import useAuthModal from "@/hooks/use-auth-modal";
 
 const formSchema = z.object({
   email: z.string().min(1),
@@ -27,8 +27,8 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
+  const authModal = useAuthModal();
   const [loading, setLoading] = useState(false);
-  const loginModal = useLoginModal();
   const router = useRouter();
 
   const form = useForm<LoginFormValues>({
@@ -41,7 +41,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
 
   const onSubmit = async (data: LoginFormValues) => {
     try {
-      console.log("here");
       setLoading(true);
       await signIn("credentials", { redirect: false, ...data })
         .then((response) => {
@@ -49,6 +48,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
             throw new Error(response.error);
           } else {
             toast.success("Login success");
+            authModal.onClose();
+            router.push("/")
           }
         })
         .catch((e) => {

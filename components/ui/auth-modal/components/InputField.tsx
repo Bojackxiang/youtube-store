@@ -15,7 +15,7 @@ interface InputFieldProps {
     {
       email: string;
       password: string;
-      phone: string;
+      phone?: string;
     },
     any,
     undefined

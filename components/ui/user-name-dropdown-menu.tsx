@@ -2,18 +2,11 @@
 
 import React from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import {
-  User2Icon,
-  LogOut,
-  InfoIcon,
-  HomeIcon,
-  LogOutIcon,
-  Home,
-} from "lucide-react";
+import { User2Icon, InfoIcon, LogOutIcon, Home } from "lucide-react";
 import { cn } from "@/libs/tw";
 import { Button } from "@/shadcn-components/ui/button";
 import useLoginModal from "@/hooks/use-auth-modal";
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 
 interface UserNameDropdownMenuProps {
   className?: string;
@@ -24,6 +17,10 @@ const UserNameDropdownMenu: React.FC<UserNameDropdownMenuProps> = ({
 }) => {
   const loginModal = useLoginModal();
   const { status } = useSession();
+
+  const logout = () => {
+    signOut({  redirect: false, callbackUrl: "/" });
+  };
 
   return (
     <>
@@ -45,7 +42,10 @@ const UserNameDropdownMenu: React.FC<UserNameDropdownMenuProps> = ({
                   <Home size={15} className="mr-2" /> Address Management
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator className="user-dropdown-menu-divider" />
-                <DropdownMenu.Item className="user-dropdown-menu-item user-dropdown-menu-item-warning">
+                <DropdownMenu.Item
+                  className="user-dropdown-menu-item user-dropdown-menu-item-warning"
+                  onClick={logout}
+                >
                   <LogOutIcon size={15} className="mr-2" /> Sign out
                 </DropdownMenu.Item>
               </DropdownMenu.Content>
