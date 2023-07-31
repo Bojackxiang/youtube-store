@@ -58,7 +58,6 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ toggleVariant }) => {
 
       const response = await axios.post(URL, data);
       const { data: payload } = response;
-      console.log(payload);
 
       if (!payload.success) {
         throw new Error(payload.message);
