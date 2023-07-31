@@ -1,11 +1,10 @@
-import { userRegisterRequest } from "@/actions/user-register-request";
-import { sign, verify } from "jsonwebtoken";
+
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import axios from "axios";
 
-export const authOptions: AuthOptions = {
+const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
   providers: [
     // GithubProvider({
