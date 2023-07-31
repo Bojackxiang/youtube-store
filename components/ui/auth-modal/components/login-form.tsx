@@ -103,7 +103,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
         className="block text-center mx-auto text-blue-600"
         onClick={toggleVariant}
       >
-        Don't have an account? Sign up
+        No Account yet? Create an account now! 
       </Button>
     </Form>
   );
