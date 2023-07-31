@@ -49,7 +49,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ toggleVariant }) => {
           } else {
             toast.success("Login success");
             authModal.onClose();
-            router.push("/")
+            router.push("/");
           }
         })
         .catch((e) => {

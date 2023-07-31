@@ -6,24 +6,32 @@ import { useForm } from "react-hook-form";
 import axios from "axios";
 
 import useLoginModal from "@/hooks/use-auth-modal";
-import { Form } from "@/shadcn-components/ui/form";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/shadcn-components/ui/form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/shadcn-components/ui/button";
 import AuthSideInfo from "../components/AuthSideInfo";
 import AuthTitle from "./AuthTitle";
-import InputField from "./InputField";
 import { toast } from "react-hot-toast";
-import { userRegisterRequest } from "@/actions/user-register-request";
 import { useRouter } from "next/navigation";
+import { Input } from "@/shadcn-components/ui/input";
 
 const formSchema = z.object({
   email: z.string().min(1),
   password: z.string().min(1),
   phone: z.string().min(1),
+  firstName: z.string().min(1),
+  lastName: z.string().min(1),
 });
 
 type LoginFormValues = z.infer<typeof formSchema>;
-
+const URL = `http://localhost:3001/api/register`;
 interface SignUpFormProps {
   toggleVariant: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
@@ -39,6 +47,8 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ toggleVariant }) => {
       email: "",
       password: "",
       phone: "",
+      firstName: "",
+      lastName: "",
     },
   });
 
@@ -46,21 +56,25 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ toggleVariant }) => {
     try {
       setLoading(true);
 
-      const response = await userRegisterRequest(data);
-      console.log("1response: ", response);
-      if (response) {
-        if (!response.success) {
-          toast.error(response.message);
-        } else {
-          toast.success("User has been registered successfully");
-          await new Promise((resolve) => setTimeout(resolve, 2000));
-          loginModal.onClose();
-          router.push("/sign-up-success");
-        }
+      const response = await axios.post(URL, data);
+      const { data: payload } = response;
+      console.log(payload);
+
+      if (!payload.success) {
+        throw new Error(payload.message);
+      } else {
+        toast.success("User has been registered successfully");
+        await new Promise((resolve) => setTimeout(resolve, 2000));
+        loginModal.onClose();
+        router.push("/sign-up-success");
       }
     } catch (error: any) {
-      console.log(error);
-      toast.error(error.message);
+      const message = error.response.data.error;
+      if (message) {
+        toast.error(`Sorry, ${message}`);
+      } else {
+        toast.error(`Sorry, something wrong, try again later`);
+      }
     } finally {
       setLoading(false);
     }
@@ -72,29 +86,106 @@ const SignUpForm: React.FC<SignUpFormProps> = ({ toggleVariant }) => {
         <AuthTitle>Sign Up</AuthTitle>
         <div className="flex flex-col sm:flex-row justify-around p-5">
           <div className="flex-1">
-            <InputField
-              form={form}
-              fieldName="email"
-              placeholder="email"
-              label="email"
-              loading={loading}
+            {/* Email */}
+            <FormField
+              control={form.control}
+              name={"email"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-neutral-400 pl-2"
+                      disabled={loading}
+                      placeholder={"Enter the email"}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <InputField
-              className="mt-4"
-              form={form}
-              fieldName="password"
-              placeholder="password"
-              label="password"
-              type="password"
-              loading={loading}
+
+            {/* Password */}
+            <FormField
+              control={form.control}
+              name={"password"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="password"
+                      className="border-neutral-400 pl-2"
+                      disabled={loading}
+                      placeholder={"Enter the email"}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-            <InputField
-              className="mt-4"
-              form={form}
-              fieldName="phone"
-              placeholder="phone"
-              label="phone"
-              loading={loading}
+
+            {/* First Name */}
+            <FormField
+              control={form.control}
+              name={"firstName"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>First Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      // type={type}
+                      className="border-neutral-400 pl-2"
+                      disabled={loading}
+                      placeholder={"First name"}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Last Name */}
+            <FormField
+              control={form.control}
+              name={"lastName"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Last Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-neutral-400 pl-2"
+                      disabled={loading}
+                      placeholder={"LastName Name"}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            {/* Phone */}
+            <FormField
+              control={form.control}
+              name={"phone"}
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      className="border-neutral-400 pl-2"
+                      disabled={loading}
+                      placeholder={"phone"}
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
             <div className="mt-4">
               <Button className="w-full text-neutral-100 font-bold bg-gradient-to-r to-blue-500 from-cyan-500">

@@ -11,7 +11,6 @@ import UserNameDropdownMenu from "./user-name-dropdown-menu";
 
 const Navbar = async () => {
   const categories: Category[] = await getCategories();
-  const session = null
 
 
   return (

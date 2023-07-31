@@ -1,10 +1,9 @@
-import { userRegisterRequest } from '@/actions/user-register-request'
-import {sign, verify} from 'jsonwebtoken'
-import NextAuth, { AuthOptions } from "next-auth"
-import CredentialsProvider from "next-auth/providers/credentials"
-import GithubProvider from "next-auth/providers/github"
-import GoogleProvider from "next-auth/providers/google"
-
+import { userRegisterRequest } from "@/actions/user-register-request";
+import { sign, verify } from "jsonwebtoken";
+import NextAuth, { AuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import axios from "axios";
 
 export const authOptions: AuthOptions = {
   secret: process.env.NEXTAUTH_SECRET,
@@ -18,32 +17,63 @@ export const authOptions: AuthOptions = {
     //   clientSecret: process.env.GOOGLE_CLIENT_SECRET as string
     // }),
     CredentialsProvider({
-      name: 'credentials',
+      name: "credentials",
       credentials: {
-        email: { label: 'email', type: 'text' },
-        password: { label: 'password', type: 'password' },
+        email: { label: "email", type: "text" },
+        password: { label: "password", type: "password" },
       },
       async authorize(credentials) {
-        console.log("reached here")
-        if (!credentials?.email || !credentials?.password) {
-          throw new Error('Invalid credentials');
+        try {
+          if (!credentials?.email || !credentials?.password) {
+            throw new Error("Invalid credentials");
+          }
+          const response = await axios.post(
+            `${process.env.PUBLIC_API_URL}/user-auth/signin`,
+            {
+              email: credentials.email,
+              password: credentials.password,
+              storeToken: process.env.STORE_TOKEN,
+            }
+          );
+
+          console.log(response.data);
+
+          if (!response.data) {
+            throw new Error("Network issue, please try later.");
+          }
+
+          const { success, message, payload } = response.data;
+
+          if (!success) {
+            throw new Error(message);
+          }
+
+          const { token, id, email } = payload;
+
+          return {
+            token,
+            id,
+            email,
+          };
+        } catch (err: any) {
+          throw new Error(err.message);
         }
+      },
 
-        console.log(credentials)
-
-
-        return {
-          id: '', 
-          email: '', 
-        }; 
-      }
-    })
+    }),
   ],
-  debug: process.env.NODE_ENV === 'development',
+  debug: process.env.NODE_ENV === "development",
   session: {
     strategy: "jwt",
   },
-}
+  callbacks: {
+    session: async ({session, token, user}) => {
+      console.log('callbacks')
+      console.log(session, token, user)
+      return session;
+    }
+  }
+};
 
 const handler = NextAuth(authOptions);
 

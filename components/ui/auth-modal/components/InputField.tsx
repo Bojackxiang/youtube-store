@@ -16,12 +16,14 @@ interface InputFieldProps {
       email: string;
       password: string;
       phone?: string;
+      firstName?: string;
+      lastName?: string;
     },
     any,
     undefined
   >;
   className?: string;
-  fieldName: "email" | "password" | "phone";
+  fieldName: "email" | "password" | "phone" | "firstName" | "lastName";
   placeholder: string;
   label: string;
   loading: boolean;

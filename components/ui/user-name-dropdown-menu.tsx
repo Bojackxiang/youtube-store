@@ -16,7 +16,8 @@ const UserNameDropdownMenu: React.FC<UserNameDropdownMenuProps> = ({
   className,
 }) => {
   const loginModal = useLoginModal();
-  const { status } = useSession();
+  const { status, data} = useSession();
+  console.log('data: ', data);
 
   const logout = () => {
     signOut({  redirect: false, callbackUrl: "/" });
