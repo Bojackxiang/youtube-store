@@ -1,4 +1,3 @@
-
 import NextAuth, { AuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
@@ -58,20 +57,33 @@ const authOptions: AuthOptions = {
           throw new Error(err.message);
         }
       },
-
     }),
   ],
   debug: process.env.NODE_ENV === "development",
-  session: {
-    strategy: "jwt",
-  },
   callbacks: {
-    session: async ({session, token, user}) => {
-      console.log('callbacks')
-      console.log(session, token, user)
+    jwt: async ({ token, user }) => {
+      if (token && user) {
+        token.customerId = user.id;
+      }
+
+      return token;
+    },
+    session: async ({ session, token, user }) => {
+      if (token) {
+        const customerId = token.customerId;
+        const response = await axios.get(
+          `${process.env.PUBLIC_API_URL}/user-auth/${customerId}/me`
+        );
+        const foundUserData = response?.data?.payload;
+        if (foundUserData) {
+          session.user = foundUserData;
+        }
+      }
+
+      console.log(session);
       return session;
-    }
-  }
+    },
+  },
 };
 
 const handler = NextAuth(authOptions);
