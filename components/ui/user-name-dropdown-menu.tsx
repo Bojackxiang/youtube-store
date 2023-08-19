@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { User2Icon, InfoIcon, LogOutIcon, Home } from "lucide-react";
 import { cn } from "@/libs/tw";
@@ -16,11 +16,19 @@ const UserNameDropdownMenu: React.FC<UserNameDropdownMenuProps> = ({
   className,
 }) => {
   const loginModal = useLoginModal();
-  const { status, data} = useSession();
-  console.log('data: ', data);
+  const { status, data } = useSession();
+  console.log("data: ", data);
+
+  // logout user if expired
+  useEffect(() => {
+    const expireDate = data?.expires;
+    if (expireDate && new Date(expireDate) < new Date()) {
+      signOut();
+    }
+  }, [data]);
 
   const logout = () => {
-    signOut({  redirect: false, callbackUrl: "/" });
+    signOut({ redirect: false, callbackUrl: "/" });
   };
 
   return (

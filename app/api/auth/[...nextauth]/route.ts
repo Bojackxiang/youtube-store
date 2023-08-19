@@ -80,7 +80,6 @@ const authOptions: AuthOptions = {
         }
       }
 
-      console.log(session);
       return session;
     },
   },
